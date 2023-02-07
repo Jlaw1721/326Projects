@@ -10,6 +10,7 @@ public class BallBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ballSpeed = 500f;
         Debug.Log($"Left Player: {leftPlayerScore}   Right Player: {rightPlayerScore}");
         Vector3 force = Vector3.left * 500f;
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -63,9 +64,6 @@ public class BallBehavior : MonoBehaviour
 
         lPaddle.transform.position = new Vector3(-14, 0, 0);
         rPaddle.transform.position = new Vector3(14, 0, 0);
-
-        var leftSpeed = lPaddle.GetComponent<PaddleMovement>();
-        var rightSpeed = rPaddle.GetComponent<PaddleMovement>();
 
         ballSpeed = 500f;
 
