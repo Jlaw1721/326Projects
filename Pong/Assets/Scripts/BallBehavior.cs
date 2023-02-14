@@ -1,26 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BallBehavior : MonoBehaviour
 {
     private float leftPlayerScore = 0;
     private float rightPlayerScore = 0;
-    public float ballSpeed = 500f;
+    private float leftPlayerWins = 0;
+    private float rightPlayerWins = 0;
+    private int powerUpLimit = 4;
+
+    public GameObject boost1, boost2, change1, change2;
+    public TextMeshProUGUI rightScoreText, leftScoreText, rightWin, leftWin;
+    public float ballSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
-        ballSpeed = 500f;
-        Debug.Log($"Left Player: {leftPlayerScore}   Right Player: {rightPlayerScore}");
-        Vector3 force = Vector3.left * 500f;
+        //rightScore.text = $"Score: {rightPlayerScore}";
+        //leftScore.text = $"Score: {leftPlayerScore}";
+        //Vector3 force = Vector3.left * 500f;
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddForce(force, ForceMode.Force);
+        rb.velocity = Vector3.left * ballSpeed;
     }
-
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        powerUpLimit--;
+
+        if (powerUpLimit == 0)
+        {
+            boost1.SetActive(true);
+            boost2.SetActive(true);
+            change1.SetActive(true);
+            change2.SetActive(true);
+
+            powerUpLimit = 4;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -28,30 +51,49 @@ public class BallBehavior : MonoBehaviour
         if(collision.gameObject.name == "RightLossDetector")
         {
             leftPlayerScore += 1;
-            if(leftPlayerScore == 11)
+
+            if (leftPlayerScore > 7)
+            {
+                leftScoreText.color = Color.red;
+            }
+
+            if (leftPlayerScore == 11)
             {
                 leftPlayerScore = 0;
                 rightPlayerScore = 0;
-                Debug.Log("Game Over, Left Paddle Wins!");
+
+                leftPlayerWins++;
+                leftWin.text = $"Wins: {leftPlayerWins}";
+                
+                leftScoreText.color = Color.white;
                 resetBall("right");
             } else
             {
-                Debug.Log($"Left Player: {leftPlayerScore}   Right Player: {rightPlayerScore}");
                 resetBall("right");
             }
         } else if(collision.gameObject.name == "LeftLossDetector")
         {
             rightPlayerScore += 1;
+
+            if (rightPlayerScore > 7)
+            {
+                rightScoreText.color = Color.red;
+            }
+
             if (rightPlayerScore == 11)
             {
                 leftPlayerScore = 0;
                 rightPlayerScore = 0;
-                Debug.Log("Game Over, Right Paddle Wins!");
+
+                rightPlayerWins++;
+                rightWin.text = $"Wins: {rightPlayerWins}";
+                
+                rightScoreText.color = Color.white;
                 resetBall("left");
             }
             else
             {
-                Debug.Log($"Left Player: {leftPlayerScore}   Right Player: {rightPlayerScore}");
+                
                 resetBall("left");
             }
         }
@@ -59,13 +101,16 @@ public class BallBehavior : MonoBehaviour
 
     void resetBall(string leftOrRight)
     {
+        leftScoreText.text = $"Score: {leftPlayerScore}";
+        rightScoreText.text = $"Score: {rightPlayerScore}";
+
         var lPaddle = GameObject.Find("LeftPaddle");
         var rPaddle = GameObject.Find("RightPaddle");
 
         lPaddle.transform.position = new Vector3(-14, 0, 0);
         rPaddle.transform.position = new Vector3(14, 0, 0);
 
-        ballSpeed = 500f;
+        ballSpeed = 5f;
 
         Transform t = GetComponent<Transform>();
         t.position = Vector3.zero;
@@ -74,14 +119,13 @@ public class BallBehavior : MonoBehaviour
         rb.velocity = Vector3.zero;
 
         if (leftOrRight == "left")
-        { 
-            Vector3 force = Vector3.left * 500f;
-            rb.AddForce(force, ForceMode.Force);
+        {
+            rb.velocity = Vector3.left * ballSpeed;
         }
         else
         {
-            Vector3 force = Vector3.right * 500f;
-            rb.AddForce(force, ForceMode.Force);
+            rb.velocity = Vector3.right * ballSpeed;
+    
         }
     }
 }
