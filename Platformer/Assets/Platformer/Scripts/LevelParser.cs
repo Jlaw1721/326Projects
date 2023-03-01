@@ -9,6 +9,9 @@ public class LevelParser : MonoBehaviour
     public GameObject brickPrefab;
     public GameObject questionBoxPrefab;
     public GameObject stonePrefab;
+    public GameObject goalPrefab;
+    public GameObject waterPrefab;
+    public GameObject coinPrefab;
     public Transform environmentRoot;
 
     // --------------------------------------------------------------------------
@@ -24,6 +27,10 @@ public class LevelParser : MonoBehaviour
         {
             ReloadLevel();
         }
+    }
+    
+    public void onDeath(){
+        ReloadLevel();
     }
 
     // --------------------------------------------------------------------------
@@ -76,6 +83,21 @@ public class LevelParser : MonoBehaviour
                 {
                     var newQBox = Instantiate(questionBoxPrefab, new Vector3(column, row, 0f), Quaternion.identity);
                     newQBox.transform.parent = environmentRoot;
+                }
+                else if (letter == 'g')
+                {
+                    var newGoal = Instantiate(goalPrefab, new Vector3(column, row, 0f), Quaternion.identity);
+                    newGoal.transform.parent = environmentRoot;
+                }
+                else if (letter == 'c')
+                {
+                    var newCoin = Instantiate(coinPrefab, new Vector3(column, row, 0f), Quaternion.identity);
+                    newCoin.transform.parent = environmentRoot;
+                }
+                else if (letter == 'w')
+                {
+                    var newWater = Instantiate(waterPrefab, new Vector3(column, row, 0f), Quaternion.identity);
+                    newWater.transform.parent = environmentRoot;
                 }
             }
             row++;
