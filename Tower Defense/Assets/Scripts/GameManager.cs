@@ -5,8 +5,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private bool gameEnded = false;
+    public static bool gameEnded;
+
+    public GameObject gameOverUI;
     // Update is called once per frame
+
+    private void Start()
+    {
+        gameEnded = false;
+    }
+
     void Update()
     {
         if (gameEnded)
@@ -23,6 +31,7 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         gameEnded = true;
-        Debug.Log("GAME OVER");
+        
+        gameOverUI.SetActive(true);
     }
 }
